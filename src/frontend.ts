@@ -13,6 +13,8 @@ import {
     neighbor_bonus,
     Background_Canvas,
     updateVariables,
+    offset_x,
+    offset_y,
     version
 } from "./main.js";
 
@@ -105,7 +107,9 @@ saveSetting.addEventListener("click", () => {
         margin: margin,
         background: background,
         base_color_probability: base_color_probability,
-        neighbor_bonus: neighbor_bonus
+        neighbor_bonus: neighbor_bonus,
+        offset_x: offset_x,
+        offset_y: offset_y
     };
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
     const dlAnchorElem = document.createElement('a');
@@ -131,7 +135,7 @@ loadSetting.addEventListener("click", () => {
                     }
 
                 }
-                if (settings.width && settings.height && settings.icon_color && settings.icon_size && settings.margin && settings.background && settings.base_color_probability && settings.neighbor_bonus) {
+                if (settings.width && settings.height && settings.icon_color && settings.icon_size && settings.margin && settings.background && settings.base_color_probability && settings.neighbor_bonus && settings.offset_x !== undefined && settings.offset_y !== undefined) {
                     widthSlider.value = settings.width;
                     heightSlider.value = settings.height;
                     iconColorPicker.value = settings.icon_color;
@@ -141,8 +145,8 @@ loadSetting.addEventListener("click", () => {
                     gradiantColorTwo.value = settings.background[1];
                     colorPercentage.value = Math.pow(settings.base_color_probability, (1 / 4)).toString();
                     clusteringPercentage.value = Math.pow(settings.neighbor_bonus, (1 / 6)).toString();
-                    offsetXSlider.value = "0";
-                    offsetYSlider.value = "0";
+                    offsetXSlider.value = settings.offset_x.toString();
+                    offsetYSlider.value = settings.offset_y.toString();
                     updateVariables(widthSlider, heightSlider, iconSizeSlider, marginSlider, 
                                     iconColorPicker, gradiantColorOne, gradiantColorTwo, 
                                     colorPercentage, clusteringPercentage, 
