@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-color: #444444;
+    color: white;
+}
+
+canvas {
+    margin: auto;
+    max-width: 70%;
+    max-height: 40%;
+    display: block;
+    image-rendering: pixelated;
+    transform: scale(1);
+    border: 1px solid #ccc;
+    background-color: #ccc;
+    border-radius: .5rem;
+}
+
+body > div {
+    display: block;
+    flex-direction: row;
+
+}
+
+#sliders, #advancedConfig, #colorPickers {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#presets {
+    margin-top: 20px;
+}
+
+.sliderContainer {
+    margin-top: 20px;
+    margin-left: 5%;
+    width: max-content;
+}
+
+#controls {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#controls > * {
+    min-width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #555;
+    color: white;
+}
+button:active {
+    background-color: #333;
+    color: white;   
+}
+
+.toggle {
+    background-color: transparent;
+    padding: 0px;
+    color : white;
+    margin: 10px auto 5px;
+}
+
+.toggle:hover {
+    background-color: transparent;
+    color: #ddd;
+}
+
+hr {
+    width: 100%;
+    border: 0;
+    border: 1px solid white;
+    margin: 20px auto;
+}

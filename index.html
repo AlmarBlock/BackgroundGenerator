@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Background Generator</title>
+    <script type="module" src="/compiled/main.js" defer></script>
+    <script type="module" src="/compiled/canvas.js" defer></script>
+    <script type="module" src="/compiled/frontend.js" defer></script>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <h1>Background Generator</h1>
+    <div>
+      <div id="canvasContainer">
+        <canvas id="Background_Canvas"></canvas>
+        <button id="saveButton">Save Background</button>
+        <button id="regenerateButton">Regenerate</button>
+      </div>
+      <div id="controls">
+        <div id="sliders">
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="widthSlider"
+              value="1920"
+              min="720"
+              max="8192"
+            />
+            <input type="number" id="widthValue" value="1920" min="720" max="8192" />
+            <label for="widthSlider">Width</label>
+          </div>
+
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="heightSlider"
+              value="1080"
+              min="720"
+              max="8192"
+            />
+            <input type="number" id="heightValue" value="1080" min="720" max="8192" />
+            <label for="heightSlider">Height</label>
+          </div>
+
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="iconSizeSlider"
+              value="18"
+              min="10"
+              max="150"
+            />
+            <input type="number" id="iconSizeValue" value="18" min="10" max="150" />
+            <label for="iconSizeSlider">Icon Size</label>
+          </div>
+
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="marginSlider"
+              value="18"
+              min="10"
+              max="150"
+            />
+            <input type="number" id="marginValue" value="18" min="10" max="150" />
+            <label for="marginSlider">Margin</label>
+          </div>
+
+          <hr/>
+          <div>
+            <input type="file" id="folderInput" webkitdirectory multiple />
+          </div>
+          <hr/>
+          
+          <button class="toggle" id="toggleColorPickers">V - Show Color Pickers - V</button>
+          <div style="display: none" id="colorPickers">
+            <div>
+              <input type="color" id="iconColorPicker" value="#000000" />
+              <label for="iconColorPicker">Icon Color</label>
+            </div>
+
+            <div>
+              <input type="color" id="gradiantColorOne" value="#272823" />
+              <label for="gradiantColorOne">Gradient Color One</label>
+            </div>
+
+            <div>
+              <input type="color" id="gradiantColorTwo" value="#1e1f1c" />
+              <label for="gradiantColorTwo">Gradient Color Two</label>
+            </div>
+          </div>
+        </div>
+        <div id="advancedConfig">
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="colorPercentage"
+              value="0.35"
+              min="0"
+              max="1"
+              step="0.01"
+            />
+            <input type="number" id="colorPercentageValue" value="0.35" min="0" max="1" step="0.01" />
+            <label for="colorPercentage">Color Percentage</label>
+          </div>
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="clusteringPercentage"
+              value="0.7"
+              min="0"
+              max="1"
+              step="0.01"
+            />
+            <input type="number" id="clusteringPercentageValue" value="0.7" min="0" max="1" step="0.01" />
+            <label for="clusteringPercentage">Clustering Percentage</label>
+          </div>
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="offsetXSlider"
+              value="0"
+              min="-100"
+              max="100"
+            />
+            <input type="number" id="offsetXValue" value="0" min="-100" max="100" />
+            <label for="offsetXSlider">Offset X</label>
+          </div>
+          <div class="sliderContainer">
+            <input
+              type="range"
+              id="offsetYSlider"
+              value="0"
+              min="-100"
+              max="100"
+            />
+            <input type="number" id="offsetYValue" value="0" min="-100" max="100" />
+            <label for="offsetYSlider">Offset Y</label>
+          </div>
+          <div>
+            <input type="checkbox" id="transparentIconsCheckbox" />
+            <label for="transparentIconsCheckbox"
+              >Transparent Icons</label
+            >
+          </div>
+          <div>
+            <input type="checkbox" id="transparentShapesCheckbox" />
+            <label for="transparentShapesCheckbox"
+              >Transparent Shapes</label
+            >
+          </div>
+        </div>
+        <div id="presets">
+          <span>Horizontal:</span>
+          <br />
+          <button class="presetButton" id="p720h">720p</button>
+          <button class="presetButton" id="p1080h">1080p</button>
+          <button class="presetButton" id="p1440h">1440p</button>
+          <button class="presetButton" id="p2160h">4k</button>
+          <hr />
+          <span>Vertical:</span>
+          <br />
+          <button class="presetButton" id="p720v">720p</button>
+          <button class="presetButton" id="p1080v">1080p</button>
+          <button class="presetButton" id="p1440v">1440p</button>
+          <button class="presetButton" id="p2160v">4k</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

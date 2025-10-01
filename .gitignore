@@ -1,0 +1,6 @@
+compiled/
+.vscode/
+.DS_Store
+SVGs/
+node_modules/
+*.log

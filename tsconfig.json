@@ -1,0 +1,23 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": "src",
+    "outDir": "./compiled",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "target": "es2020",
+    "module": "esnext",
+    "lib": ["dom", "es2020"],
+    // Other Outputs
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
+    "removeComments": true,
+    
+    // Recommended Options
+    "strict": true,
+    "skipLibCheck": false,
+  }
+}
