@@ -12,7 +12,8 @@ import {
     base_color_probability, 
     neighbor_bonus,
     Background_Canvas,
-    updateVariables
+    updateVariables,
+    version
 } from "./main.js";
 
 //SECTION HTML Elements -----
@@ -48,22 +49,25 @@ const transparentShapesCheckbox = document.getElementById("transparentShapesChec
 const toggleColorPickers = document.getElementById("toggleColorPickers") as HTMLButtonElement;
 
 const saveButton = document.getElementById("saveButton") as HTMLButtonElement;
+const saveSetting = document.getElementById("saveSetting") as HTMLButtonElement;
+const loadSetting = document.getElementById("loadSetting") as HTMLButtonElement;
 const regenerateButton = document.getElementById("regenerateButton") as HTMLButtonElement;
-const p720h = document.getElementById("p720h") as HTMLButtonElement;
-const p1080h = document.getElementById("p1080h") as HTMLButtonElement;
-const p1440h = document.getElementById("p1440h") as HTMLButtonElement;
-const p2160h = document.getElementById("p2160h") as HTMLButtonElement;
-const p720v = document.getElementById("p720v") as HTMLButtonElement;
-const p1080v = document.getElementById("p1080v") as HTMLButtonElement;
-const p1440v = document.getElementById("p1440v") as HTMLButtonElement;
-const p2160v = document.getElementById("p2160v") as HTMLButtonElement;
+
+const loadIcons = document.getElementById("loadIcons") as HTMLButtonElement;
+
+const applyPresetButton = document.getElementById("applyPresetButton") as HTMLButtonElement;
 //!SECTION Buttons -----
+
+//SECTION Dropdown -----
+const presetsDropdown = document.getElementById("presetsDropdown") as HTMLSelectElement;
+//!SECTION Dropdown -----
 
 //SECTION Color Pickers -----
 const colorPickers = document.getElementById("colorPickers") as HTMLDivElement;
 const gradiantColorOne = document.getElementById("gradiantColorOne") as HTMLInputElement;
 const gradiantColorTwo = document.getElementById("gradiantColorTwo") as HTMLInputElement;
 //!SECTION Color Pickers -----
+
 //!SECTION HTML Elements -----
 //!SECTION Frontend Event Handlers -----
 
@@ -91,6 +95,74 @@ saveButton.addEventListener("click", () => {
     link.click();
 });
 
+saveSetting.addEventListener("click", () => {
+    const settings = {
+        version: version,
+        width: width,
+        height: height,
+        icon_color: icon_color,
+        icon_size: icon_size,
+        margin: margin,
+        background: background,
+        base_color_probability: base_color_probability,
+        neighbor_bonus: neighbor_bonus
+    };
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(settings, null, 2));
+    const dlAnchorElem = document.createElement('a');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "background_settings.json");
+    dlAnchorElem.click();
+});
+
+loadSetting.addEventListener("click", () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json,application/json';
+    input.onchange = e => { 
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => {
+            try {
+                const settings = JSON.parse(e.target?.result as string);
+                if (!settings.version || settings.version !== version) {
+                    if (!confirm(`Settings file version (${settings.version}) does not match application version (${version}). Loading it may cause errors. Do you want to proceed?`)) {
+                        return;
+                    }
+
+                }
+                if (settings.width && settings.height && settings.icon_color && settings.icon_size && settings.margin && settings.background && settings.base_color_probability && settings.neighbor_bonus) {
+                    widthSlider.value = settings.width;
+                    heightSlider.value = settings.height;
+                    iconColorPicker.value = settings.icon_color;
+                    iconSizeSlider.value = settings.icon_size;
+                    marginSlider.value = settings.margin;
+                    gradiantColorOne.value = settings.background[0];
+                    gradiantColorTwo.value = settings.background[1];
+                    colorPercentage.value = Math.pow(settings.base_color_probability, (1 / 4)).toString();
+                    clusteringPercentage.value = Math.pow(settings.neighbor_bonus, (1 / 6)).toString();
+                    offsetXSlider.value = "0";
+                    offsetYSlider.value = "0";
+                    updateVariables(widthSlider, heightSlider, iconSizeSlider, marginSlider, 
+                                    iconColorPicker, gradiantColorOne, gradiantColorTwo, 
+                                    colorPercentage, clusteringPercentage, 
+                                    offsetXSlider, offsetYSlider, transparentIconsCheckbox, transparentShapesCheckbox);
+                    updateSliders();
+                    updateSliderText();
+                    Generate();
+                    console.log("Settings loaded successfully.");
+                } else {
+                    alert("Invalid settings file.");
+                }
+            } catch {
+                alert("Error reading settings file.");
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+});
+
 regenerateButton.addEventListener("click", () => {
     updateVariables(widthSlider, heightSlider, iconSizeSlider, marginSlider, 
                     iconColorPicker, gradiantColorOne, gradiantColorTwo, 
@@ -103,14 +175,22 @@ regenerateButton.addEventListener("click", () => {
     regenerateButton.innerHTML = "Regenerate";
 });
 
-document.getElementById('folderInput')!.addEventListener('change', (event) => {
-    const input = event.target as HTMLInputElement;
-    if (input.files) {
+loadIcons.addEventListener("click", () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.svg,application/svg+xml';
+    input.multiple = true;
+    // @ts-ignore: webkitdirectory is not standard but supported by most browsers
+    input.webkitdirectory = true;
+    input.onchange = e => { 
+        const files = (e.target as HTMLInputElement).files;
+        if (!files) return;
         svgFilePaths.length = 0; // Clear array
-        const files = Array.from(input.files);
-        const svgFiles = files.filter(file => file.name.endsWith('.svg'));
+        const fileArray = Array.from(files);
+        const svgFiles = fileArray.filter(file => file.name.endsWith('.svg'));
         svgFilePaths.push(...svgFiles.map(file => URL.createObjectURL(file)));
-    }
+    };
+    input.click();
 });
 
 // Helper function to update sliders after profile load
@@ -125,59 +205,25 @@ function updateSliders() {
     colorPercentage.value = Math.pow(base_color_probability, (1 / 4)).toString();
     clusteringPercentage.value = Math.pow(neighbor_bonus, (1 / 6)).toString();
 }
+
+function updateSliderText() {
+    widthValue.value = widthSlider.value;
+    heightValue.value = heightSlider.value;
+    iconSizeValue.value = iconSizeSlider.value;
+    marginValue.value = marginSlider.value;
+    colorPercentageValue.value = colorPercentage.value;
+    clusteringPercentageValue.value = clusteringPercentage.value;
+    offsetXValue.value = offsetXSlider.value;
+    offsetYValue.value = offsetYSlider.value;
+}
+
+applyPresetButton.addEventListener("click", () => {
+    LoadProfile(parseInt(presetsDropdown.value));
+    updateSliders();
+    updateSliderText();
+    Generate();
+});
 //!SECTION Event listeners -----
-
-//SECTION Preset buttons -----
-// Horizontal
-p720h.addEventListener("click", () => {
-    LoadProfile("720ph");
-    updateSliders();
-    Generate();
-});
-
-p1080h.addEventListener("click", () => {
-    LoadProfile("1080ph");
-    updateSliders();
-    Generate();
-});
-
-p1440h.addEventListener("click", () => {
-    LoadProfile("1440ph");
-    updateSliders();
-    Generate();
-});
-
-p2160h.addEventListener("click", () => {
-    LoadProfile("4kh");
-    updateSliders();
-    Generate();
-});
-
-// Vertical
-p720v.addEventListener("click", () => {
-    LoadProfile("720pv");
-    updateSliders();
-    Generate();
-});
-
-p1080v.addEventListener("click", () => {
-    LoadProfile("1080pv");
-    updateSliders();
-    Generate();
-});
-
-p1440v.addEventListener("click", () => {
-    LoadProfile("1440pv");
-    updateSliders();
-    Generate();
-});
-
-p2160v.addEventListener("click", () => {
-    LoadProfile("4kv");
-    updateSliders();
-    Generate();
-});
-//!SECTION Preset buttons -----
 
 //SECTION Reset Sliders -----
 widthSlider.addEventListener("dblclick", () => {
