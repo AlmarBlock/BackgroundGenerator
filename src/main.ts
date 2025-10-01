@@ -1,7 +1,10 @@
 // ----- Imports -----
 import { SetupCanvas, CreateGradient, WriteToCanvas, DrawFormWithNCorners } from "./canvas.js";
+import { profiles } from "./presets.js";
 
 // ----- Configuration -----
+export const version: string = "1.1.0";
+
 export let width: number = 0;
 export let height: number = 0;
 export let background: string[] = ["#272823", "#1e1f1c"];
@@ -20,20 +23,6 @@ const icon_gradient: string[] = ["#808080ff", "#686868ff", "#575757ff", "#4e4e4e
 
 export let base_color_probability: number = 0.01; 
 export let neighbor_bonus: number = 0.13; 
-
-const profiles: {width: number, height: number, icon_color: string, icon_size: number, margin: number, background: string[], base_color_probability: number, neighbor_bonus: number, offset_x: number, offset_y: number}[] = [
-    // Horizontal
-    {width: 1280, height: 720,  icon_color: "#000000", icon_size: 18, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}, // 720p
-    {width: 1920, height: 1080, icon_color: "#000000", icon_size: 18, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}, // 1080p
-    {width: 2560, height: 1440, icon_color: "#000000", icon_size: 22, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}, // 1440p
-    {width: 3840, height: 2160, icon_color: "#000000", icon_size: 36, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0},  // 4k
-    //Vertical
-    {width: 720, height: 1280,  icon_color: "#000000", icon_size: 18, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}, // 720p
-    {width: 1080, height: 1920, icon_color: "#000000", icon_size: 18, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}, // 1080p
-    {width: 1440, height: 2560, icon_color: "#000000", icon_size: 22, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}, // 1440p
-    {width: 2160, height: 3840, icon_color: "#000000", icon_size: 36, margin: 18, background: ["#272823", "#1e1f1c"], base_color_probability: 0.015, neighbor_bonus: 0.117, offset_x: 0, offset_y: 0}  // 4k
-];
-
 // HTML elements are now in frontend.ts
 
 // ----- Setup canvas -----
@@ -260,47 +249,18 @@ export function Generate() {
 }
 
 //SECTION - ** Load profile settings **
-export function LoadProfile(profile: string) {
-    let id: number;
-    switch (profile) {
-        case "720ph":
-            id = 0;
-            break;
-        case "1080ph":
-            id = 1;
-            break;
-        case "1440ph":
-            id = 2;
-            break;
-        case "4kh":
-            id = 3;
-            break;
-        case "720pv":
-            id = 4;
-            break;
-        case "1080pv":
-            id = 5;
-            break;
-        case "1440pv":
-            id = 6;
-            break;
-        case "4kv":
-            id = 7;
-            break;
-        default:
-            id = 1;
-    }
-    margin = profiles[id].margin;
-    background = profiles[id].background;
-    icon_color = profiles[id].icon_color;
-    icon_size = profiles[id].icon_size;
-    width = profiles[id].width;
-    height = profiles[id].height;
-    base_color_probability = profiles[id].base_color_probability;
-    neighbor_bonus = profiles[id].neighbor_bonus;
-    offset_x = profiles[id].offset_x;
-    offset_y = profiles[id].offset_y;
-    console.log("Loaded profile:", profile, profiles[id]);
+export function LoadProfile(profile: number) {
+    margin = profiles[profile].margin;
+    background = profiles[profile].background;
+    icon_color = profiles[profile].icon_color;
+    icon_size = profiles[profile].icon_size;
+    width = profiles[profile].width;
+    height = profiles[profile].height;
+    base_color_probability = profiles[profile].base_color_probability;
+    neighbor_bonus = profiles[profile].neighbor_bonus;
+    offset_x = profiles[profile].offset_x;
+    offset_y = profiles[profile].offset_y;
+    console.log("Loaded profile:", profile, profiles[profile]);
 }
 
 // ** Update variables from sliders and inputs -> Called from frontend.ts**

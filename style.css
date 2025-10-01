@@ -19,10 +19,18 @@ canvas {
     border-radius: .5rem;
 }
 
+h3, h2, h4 {
+    top: 0px;
+    margin: 20px auto 0px;
+}
+
+h4 {
+    margin-bottom: 10px;
+}
+
 body > div {
     display: block;
     flex-direction: row;
-
 }
 
 #sliders, #advancedConfig, #colorPickers {
@@ -31,8 +39,8 @@ body > div {
     align-items: flex-start;
 }
 
-#presets {
-    margin-top: 20px;
+#sliders .buttonContainer, #advancedConfig .buttonContainer, #colorPickers .buttonContainer {
+    margin: auto;
 }
 
 .sliderContainer {
@@ -53,6 +61,18 @@ body > div {
     margin-right: auto;
 }
 
+select {
+    margin: 5px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    background-color: white;
+}
+
 button {
     margin: 5px;
     padding: 10px 20px;
@@ -61,14 +81,15 @@ button {
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    background-color: white;
 }
 
-button:hover {
+button:hover, select:hover {
     background-color: #555;
     color: white;
 }
 
-button:active {
+button:active, select:active {
     background-color: #333;
     color: white;   
 }
